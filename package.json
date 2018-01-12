@@ -1,0 +1,14 @@
+{
+  "name": "getsismos",
+  "version": "0.0.1",
+  "description": "Download earthquakes signals.",
+  "main": "server.js",
+  "author": "John",
+  "dependencies": {
+    "cheerio": "latest",
+    "csvtojson": "^1.1.9",
+    "express": "latest",
+    "mkdirp": "^0.5.1",
+    "request": "latest"
+  }
+}
