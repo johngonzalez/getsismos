@@ -1,21 +1,19 @@
-var express = require('express');
 var fs = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
-var app     = express();
 var Converter = require("csvtojson").Converter;
 var converter = new Converter({});
 var mkdirp = require('mkdirp');
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
- converter.fromFile("./reporte_sismicidad.csv",function(err, sismos){
+ converter.fromFile("./reporte_sismicidad_mag6-7.csv",function(err, sismos){
 //     // if an error has occured then handle it
      if(err){
          console.log("An Error Has Occured");
          console.log(err);
      }
-    for (i = 12; i < 21/*sismos.length*/; i++) {
+    for (i = 12; i < sismos.length; i++) {
       var baseurl = 'https://bdrsnc.sgc.gov.co/sismologia1/HCG/acelerografos/consultas/consulta_general/';
       var date = sismos[i].field1.split('/');
       var time = sismos[i].field2.split(':');
@@ -48,21 +46,20 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
             var $td;
             var url3;
             var folder = year + '/' + month;
-            var filename;
             //mkdirp(folder, function(err) {
 
               $center.find('tr').each(function(i, el) {
                 if(i>0){
                   $td = $(this).find('td').eq(14);
                   url3 = $td.find('a').attr('href');
-                  console.log(url3);
+                  //console.log(url3);
 
-                  filename = url3.split('/')[2];
+                  var filename = url3.split('/')[2];
                   url3 = baseurl + url3;
 
                   request(url3).on('response', function(res){
                     console.log('Downloading ' + filename);
-                    res.pipe(fs.createWriteStream('./' + folder + '/' + filename));
+                    res.pipe(fs.createWriteStream('./sismos/6' +filename));
                   });
                 }
               });
@@ -76,6 +73,6 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
   }
 })
 
-app.listen('8081')
-console.log('Magic happens on port 8081');
-exports = module.exports = app;
+//app.listen('8081')
+//console.log('Magic happens on port 8081');
+//exports = module.exports = app;

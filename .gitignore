@@ -57,3 +57,11 @@ typings/
 # dotenv environment variables file
 .env
 
+# Earthquakes files
+sismos
+
+# xls backup files
+*#
+
+# backup files
+*~
